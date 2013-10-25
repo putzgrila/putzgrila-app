@@ -1,0 +1,189 @@
+*{
+    -moz-box-sizing: border-box;
+ -webkit-box-sizing: border-box;
+	     box-sizing: border-box;
+}
+
+html{
+	height:100%;
+}
+
+body{
+	margin:0;
+	height:100%;
+	font-family:'Lato', "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+}
+
+input[type=text], input[type=password], input[type=email]{
+	border-radius:3px;
+	border:1px solid #cdcbc0;
+	font-family:'Lato', "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-weight:900;
+	color:#444444;
+	font-size: 15px;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-appearance: none;
+	padding: 7px 15px;
+}
+
+input:focus{
+	outline-color:#7296ab;
+}
+
+.hidden-label{
+	display:none;
+}
+
+#wrapper{
+	max-width:320px;
+	margin:0 auto;
+}
+/**/
+/*Styles for login page*/
+/**/
+#login-page{
+	min-height:100%;
+	background: #ffb600; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ffb600 80%, #ff9300 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(80%,#ffb600), color-stop(100%,#ff9300)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ffb600 80%,#ff9300 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ffb600 80%,#ff9300 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ffb600 80%,#ff9300 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ffb600 80%,#ff9300 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffb600', endColorstr='#ff9300',GradientType=0 ); /* IE6-9 */
+	background-attachment: fixed;
+	position:relative;
+	overflow: visible;
+	padding-bottom:30px;
+}
+
+#login-page:after{
+	content:"";
+	display:block;
+	height:10px;
+	width:100%;
+	background:url(../img/footer.png) no-repeat;
+	background-size: 100% 10px;
+	position:absolute;
+	bottom:0;
+}
+
+.splashscreen-margin{
+	padding-top:7vh;
+}
+
+#logo h1{
+	width:188px;
+	height:86px;
+	margin:0 auto 7vh;
+	text-indent:-9999px;
+	background:url(../img/logo.png) no-repeat;
+	background-size:contain;
+}
+
+#login-forms input[type=text], #login-forms input[type=password], input[type=email]{
+	width:100%;
+	font-weight:bold;
+	font-weight:900;
+	font-size:13px;
+	padding: 10px 15px;
+	margin:0;
+}
+
+.login-input{
+	border-bottom-right-radius: 0 !important;
+	border-bottom-left-radius: 0 !important;
+	border-bottom:0 !important;
+}
+
+.password-input{
+	border-top-right-radius: 0 !important;
+	border-top-left-radius: 0 !important;
+}
+
+#login{
+	padding:0 30px;
+}
+
+#login-forms{
+	position:relative;
+}
+
+.facebook-login{
+	font-family:'Lato', "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-weight:900;
+	padding:8px 0;
+	border:none;
+	border-radius:3px;
+	background-color:#5f97ad;
+	color:#ffffff;
+	display:block;
+	font-size:15px;
+	width: 100%;
+	box-shadow: 0 4px #456b77;
+}
+
+.alternative-login{
+	font-family:'Lato', "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-weight:900;
+	padding:7px 11px;
+	border:none;
+	border-radius:3px;
+	background-color:#e19ea1;
+	color:#ffffff;
+	display:block;
+	font-size:13px;
+	box-shadow: 0 2px #d08d8e;
+	position:absolute;
+	bottom:2px;
+	right:2px;
+}
+
+.login-divider{
+	width:100%;
+	margin:20px 0;
+	position:relative;
+	text-align:center;
+}
+
+.login-divider:before{
+	content:"";
+	display:block;
+	position:relative;
+	top:6px;
+	border-top:1px solid #fff;
+}
+
+.login-divider p{
+	position:relative;
+	display:inline-block;
+	width:auto;
+	font-size:12px;
+	color:#fff;
+	background-color:#ffb600;
+	padding:0 10px;
+}
+
+#signup{
+	font-size:15px;
+	color:#fff;
+	text-align:center;
+	margin-top:15vh;
+}
+
+#signup a{
+	color:#fff;
+	font-weight:bold;
+	font-weight:900;
+	text-decoration:none;
+}
+
+#footer{
+	position:absolute;
+	height:10px;
+	width:100%;
+	bottom:0;
+	background: url(../img/footer.png) no-repeat;
+	background-size:100% 10px;
+	z-index:20;
+}

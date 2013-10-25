@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<title>Putzgrila!</title>
+	<link rel="stylesheet" type="text/css" href="css/reset.css" >
+	<link rel="stylesheet" type="text/css" href="css/main.css" >
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="js/putz.js"></script>
+	<link rel="apple-touch-icon" href="favicon.png"/>
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,900' rel='stylesheet' type='text/css'>
+</head>
+ 
+<body>
+	<div class="wrapper wrapper-menu">
+		<ul id="navigation-menu">
+			<li><a href="atividade.html" class="stream-link">Atividade recente</a></li>
+			<li><a href="cadastro.html" class="active complain-link">Fazer reclamação</a></li>
+			<li><a href="estatisticas.html" class="statistics-link">Estatísticas</a></li>
+			<li><a href="perfil.html" class="profile-link">Meu perfil</a></li>
+		</ul>
+	</div>	
+	<div class="wrapper wrapper-app">
+		<div id="header" class="header section-header">
+			<a class="show-menu" href="#">Menu</a>
+			<h1 class="actual-page">Fazer reclamação</h1>
+		</div>
+		<div id="main">
+			<div id="send-complain" class="form">
+				<div class="entry entry-line">
+					<p class="label">Linha:</p>
+					<input id="line" type="text" placeholder="000"/>
+				</div>
+				<div class="entry entry-vehicle">
+					<p class="label">Nº do veículo:</p>
+					<input id="vehicle" type="text" placeholder="A0000"/>
+					<a class="input-buttons" href="#">O que é isso</a>
+				</div>
+				<div class="entry entry-date">
+					<p class="label">Data:</p>
+					<input id="date-of-complain" type="date"/>
+				</div>
+				<div class="entry entry-time">
+					<p class="label">Hora:</p>
+					<input id="time-of-complain" type="time"/>
+				</div>
+				<div class="entry entry-complain-type">
+					<p class="label">O que aconteceu?</p>
+					<textarea disabled id="complain-type"  class="empty-textarea" rows="2">Escolha uma das opções da lista</textarea>
+					<a class="input-buttons" href="#">O que é isso</a>
+				</div>
+				<div class="entry entry-complain-local">
+					<p class="label">Local da ocorrência:</p>
+					<textarea id="complain-local" rows="2">Rua Voluntários da Pátria, Botafogo, próximo ao número 471.</textarea>
+					<a class="input-buttons" href="#">O que é isso</a>
+				</div>
+				<div class="final-info-send">
+					<p class="info">Você poderá adicionar fotos e comentários em seguida.</p>
+					<button class="send-form" onclick="location.href='send.html';">ok</button>
+				</div>
+			</div>
+		</div>
+		<div class="footer"></div>	
+		<div id="compain-type-listing" class="layer-page">
+			<div class="sub-header">
+				<a class="goback" href="#">Voltar</a>
+				<h1 class="actual-page">O que aconteceu?</h1>
+			</div>
+			<div class="internal-body">
+				<ul class="" id="complain-list">
+					<li>Motorista não parou e me deixou esperando no ponto</li>
+					<li>Motorista não parou/parou longe do ponto onde eu queria saltar.</li>
+					<li>Motorista/trocador teve atitude grosseira com passageiros</li>
+					<li>Excesso de passageiros </li>
+					<li>Motorista/trocador se recusou a levar um passageiro</li>
+					<li>Direção perigosa</li>
+					<li>Condições precárias e/ou falta de manutenção</li>
+					<li>Falta e/ou demora de ônibus da linha</li>
+					<li>Falta de acessibilidade para deficientes</li>
+					<li>Outras reclamações</li>
+				</ul>
+			</div>
+		</div>
+		<div id="vehicle-number-help" class="layer-page">
+			<div class="sub-header">
+				<a class="goback" href="#">Voltar</a>
+				<h1 class="actual-page">Número do veículo</h1>
+			</div>
+			<div class="internal-body">
+				<p>O número do veículo é um código, geralmente composto por 6 caracteres. Veja onde encontrar esses números nos ônibus municipais do Rio de Janeiro:</p>
+				<img src="img/img_vehicle-number.png"/>
+			</div>
+		</div>
+	</div>
+</body>
