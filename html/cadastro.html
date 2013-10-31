@@ -9,6 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="css/reset.css" >
 	<link rel="stylesheet" type="text/css" href="css/main.css" >
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="js/iscroll.js"></script>
 	<script src="js/putz.js"></script>
 	<link rel="apple-touch-icon" href="favicon.png"/>
 	<link href='http://fonts.googleapis.com/css?family=Lato:400,900' rel='stylesheet' type='text/css'>
@@ -69,7 +70,7 @@
 				<a class="goback" href="#">Voltar</a>
 				<h1 class="actual-page">O que aconteceu?</h1>
 			</div>
-			<div class="internal-body">
+			<div id="complain-scroller" class="internal-body">
 				<ul class="" id="complain-list">
 					<li>Motorista não parou e me deixou esperando no ponto</li>
 					<li>Motorista não parou/parou longe do ponto onde eu queria saltar.</li>
@@ -83,6 +84,14 @@
 					<li>Outras reclamações</li>
 				</ul>
 			</div>
+			
+			<script type="text/javascript">
+				var activityHeight = $('#complain-list').height();
+				$('#complain-list').height(activityHeight + 100);
+				var myScroll = new iScroll('complain-scroller');
+			</script>
+
+
 		</div>
 		<div id="vehicle-number-help" class="layer-page">
 			<div class="sub-header">

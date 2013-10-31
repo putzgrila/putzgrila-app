@@ -9,6 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="css/reset.css" >
 	<link rel="stylesheet" type="text/css" href="css/main.css" >
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="js/iscroll.js"></script>
 	<script src="js/putz.js"></script>
 	<link rel="apple-touch-icon" href="favicon.png"/>
 	<link href='http://fonts.googleapis.com/css?family=Lato:400,900' rel='stylesheet' type='text/css'>
@@ -28,6 +29,7 @@
 			<a class="show-menu" href="#">Menu</a>
 			<h1 class="actual-page">Atividade recente</h1>
 		</div>
+		
 		<div id="main">
 			<ul id="activity-stream">
 
@@ -138,9 +140,15 @@
 					 --><a href="#" class="share-complain">Compartilhe</a>
 					</div>
 				</li>
-
 			</ul>
-		</div>	
+		</div>
+			
+		<script type="text/javascript">
+			var activityHeight = $('#activity-stream').height();
+			$('#activity-stream').height(activityHeight + 500);
+			var myScroll = new iScroll('main');
+		</script>
+
 		<div class="footer">
 			<a href="cadastro.html" class="add-new-complain">Nova reclamação</a>
 		</div>	

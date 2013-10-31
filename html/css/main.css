@@ -92,10 +92,7 @@ textarea:disabled{
 	overflow:hidden;
 	background-color: #e5e4dd;
 	position: absolute;
-	top:0;
-	left:0;
-	right:0;
-	bottom:0;
+	height:100%;
 }
 
 .wrapper-app{
@@ -379,7 +376,7 @@ p.label{
 .internal-body{
 	position:absolute;
 	top:44px;
-	bottom:0;
+	height:100%;
 	width:100%;
 	overflow-y:auto;
 	background-color: #e5e4dd;
