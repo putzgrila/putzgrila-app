@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/lib/!svn/ver/6131/poligno/ios/trunk/Textbook/Util
+END
+RequestUtil.m
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/lib/!svn/ver/4047/poligno/ios/trunk/Textbook/Util/RequestUtil.m
+END
+FileUtil.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/lib/!svn/ver/6057/poligno/ios/trunk/Textbook/Util/FileUtil.h
+END
+FileCryptHandler.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/lib/!svn/ver/6030/poligno/ios/trunk/Textbook/Util/FileCryptHandler.h
+END
+Reachability.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/lib/!svn/ver/6063/poligno/ios/trunk/Textbook/Util/Reachability.h
+END
+CustomResourceUtil.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/lib/!svn/ver/4254/poligno/ios/trunk/Textbook/Util/CustomResourceUtil.h
+END
+FileUtil.m
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/lib/!svn/ver/6131/poligno/ios/trunk/Textbook/Util/FileUtil.m
+END
+FileCryptHandler.m
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/lib/!svn/ver/6030/poligno/ios/trunk/Textbook/Util/FileCryptHandler.m
+END
+CustomResourceUtil.m
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/lib/!svn/ver/4047/poligno/ios/trunk/Textbook/Util/CustomResourceUtil.m
+END
+Reachability.m
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/lib/!svn/ver/6063/poligno/ios/trunk/Textbook/Util/Reachability.m
+END
+RequestUtil.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/lib/!svn/ver/4047/poligno/ios/trunk/Textbook/Util/RequestUtil.h
+END

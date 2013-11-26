@@ -1,0 +1,20 @@
+//
+//  CryptoUtil.h
+//  Textbook
+//
+//  Created by Rodrigo Miranda Terra on 24/05/13.
+//
+//
+
+#import <Foundation/Foundation.h>
+
+@interface FileCryptHandler : NSObject
+
+-(id) initWithFileDescriptor:(FILE *) pFile;
+-(id) initWithFilePath:(NSString *) filePath;
+-(void) dealloc;
+-(long long) getPlainFileSize;
+-(bool) readNBytes:(long)size toBuffer:(void *)buffer fromOffset:(long long)offset;
+-(bool) isEncrypted;
+
+@end

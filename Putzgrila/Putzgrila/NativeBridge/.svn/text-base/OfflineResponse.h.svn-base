@@ -1,0 +1,17 @@
+//
+//  OfflineResponse.h
+//  Textbook
+//
+//  Created by Marcelo Moreira Tavares on 5/3/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface OfflineResponse : NSObject
+
+@property (nonatomic, strong) NSData *data;
+@property (nonatomic, strong) NSDictionary *headers;
+@property (nonatomic) NSInteger statusCode;
+
+@end

@@ -1,0 +1,287 @@
+//
+//  NativeBridgeInterceptor.m
+//  Textbook
+//
+//  Created by Marcelo Moreira Tavares on 7/2/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import "NativeBridgeInterceptor.h"
+#import "FileDownloadManager.h"
+#import "AuthenticationManager.h"
+#import "MACAddress.h"
+#import "CustomResourceUtil.h"
+#import "RequestUtil.h"
+#import "JSONKit.h"
+#import "PDFManager.h"
+#import "UserManager.h"
+#import "LcaManager.h"
+#import "AppDelegate.h"
+#import "HTTPServer.h"
+#import "Reachability.h"
+
+#define URL_MATCH(ORIGINAL_URL, URL) ([ORIGINAL_URL.absoluteString rangeOfString:URL].location != NSNotFound)
+
+@implementation NativeBridgeInterceptor
+
++ (BOOL) shouldInterceptRequest: (NSURL *) URL
+{
+    if( [[URL scheme] isEqualToString:@"http"] )
+    {
+        if ( URL_MATCH(URL, @"provisioningfiledownload.jsp") && !URL_MATCH(URL, @"&native_call=1"))
+            return true;
+    }
+
+    return [[URL scheme] isEqualToString:@"tbk"];
+}
+
++ (OfflineResponse *) processRequest: (NSURLRequest*)request
+{
+    OfflineResponse *response = nil;
+    
+    if (URL_MATCH(request.URL, @"addCategory"))
+    {
+        NSString *categoryId = [RequestUtil getParameter:request parameterName:@"categoryId"];
+        NSString *parentId = [RequestUtil getParameter:request parameterName:@"parentId"];
+        NSString *publicationId = [RequestUtil getParameter:request parameterName:@"publicationId"];
+        
+        [FileDownloadManager addCategory:categoryId parent:parentId publicationId:publicationId];
+    }
+    else if (URL_MATCH(request.URL, @"deleteCategory"))
+    {
+        NSString *categoryId = [RequestUtil getParameter:request parameterName:@"categoryId"];
+
+        [FileDownloadManager deleteCategory:categoryId];
+    }
+    else if (URL_MATCH(request.URL, @"pauseCategory"))
+    {
+        NSString *categoryId = [RequestUtil getParameter:request parameterName:@"categoryId"];
+        [FileDownloadManager pauseCategory:categoryId];
+    }
+    else if (URL_MATCH(request.URL, @"resumeCategory"))
+    {
+        NSString *categoryId = [RequestUtil getParameter:request parameterName:@"categoryId"];
+        [FileDownloadManager resumeCategory:categoryId];
+    }
+    else if (URL_MATCH(request.URL, @"downloadFile"))
+    {
+        NSString *fileId = [RequestUtil getParameter:request parameterName:@"fileId"];
+        NSString *categoryId = [RequestUtil getParameter:request parameterName:@"categoryId"];
+        NSString *login = [RequestUtil getParameter:request parameterName:@"login"];
+        long fileSize = [[RequestUtil getParameter:request parameterName:@"fileSize"] longLongValue];
+
+        [FileDownloadManager downloadFile:fileId category:categoryId user:login sizeInBytes:fileSize priority:1];
+    }
+    else if (URL_MATCH(request.URL, @"getDownloadStatus"))
+    {
+        NSString *login = [RequestUtil getParameter:request parameterName:@"login"];
+        NSString *categories = [RequestUtil getParameter:request parameterName:@"categories"];
+        NSString *publicationId = [RequestUtil getParameter:request parameterName:@"publicationId"];
+        
+        NSArray *array = [categories componentsSeparatedByString:@","];
+        NSArray *data = [FileDownloadManager getDownloadStatus:array forUser:login publicationId:publicationId];
+                
+        response = [[OfflineResponse alloc] init];
+        response.statusCode = 200;
+        response.data = [data JSONData];
+    }
+    else if (URL_MATCH(request.URL, @"saveLogin"))
+    {
+        NSString *login = [RequestUtil getParameter:request parameterName:@"login"];
+        NSString *password = [RequestUtil getParameter:request parameterName:@"password"];
+        
+        [AuthenticationManager login:login password:password];
+    }
+    else if (URL_MATCH(request.URL, @"clearCategoryFiles"))
+    {
+        NSString *categoryId = [RequestUtil getParameter:request parameterName:@"categoryId"];
+        [FileDownloadManager clearCategoryFiles:categoryId];
+    }
+    else if (URL_MATCH(request.URL, @"deleteUnreferencedFiles"))
+    {
+        [FileDownloadManager deleteUnreferencedFiles];
+    }
+    else if (URL_MATCH(request.URL, @"fileExists"))
+    {
+        NSString *fileId     = [RequestUtil getParameter:request parameterName:@"fileId"];
+        
+        response = [[OfflineResponse alloc] init];
+
+        if([FileDownloadManager fileExist:fileId])
+            response.statusCode = 200;
+
+        else
+            response.statusCode = 404;
+
+    }
+    else if (URL_MATCH(request.URL, @"getFilePath"))
+    {
+        NSString *fileId = [RequestUtil getParameter:request parameterName:@"fileId"];
+
+        response = [[OfflineResponse alloc] init];
+        response.statusCode = 200;
+        response.data = [[FileDownloadManager getFilePath:fileId] dataUsingEncoding:NSUTF8StringEncoding];
+    }
+    else if (URL_MATCH(request.URL, @"renderPdfPage") || URL_MATCH(request.URL, @"extractPdfText") || URL_MATCH(request.URL, @"extractPdfTextMapping") || URL_MATCH(request.URL, @"getRenderOptimumSizeFactor"))
+    {
+        response = [[OfflineResponse alloc] init];
+        
+        response.statusCode = 200;  //TODO: Need implement error handler
+        PDFManager *pdfManager = [[PDFManager alloc] init];
+        
+        // At least for while all tbk scheme have fileId and page parameters
+        NSString *fileId     = [RequestUtil getParameter:request parameterName:@"fileId"];
+        NSString *page       = [RequestUtil getParameter:request parameterName:@"page"];
+        bool transparentBg   = [[RequestUtil getParameter:request parameterName:@"transparentBg"] boolValue];
+        
+        if (URL_MATCH(request.URL, @"renderPdfPage"))
+        {
+            response.data = [pdfManager renderPageProcessForFile:fileId page:[page intValue] transparentBg:transparentBg];
+        }
+        // Please note that here sequence matter if you change extractPdfText with extractPdfTextMapping
+        // extractPdfTextMapping never will be reach because extractPdfText is a substring of extractPdfTextMapping
+        else if (URL_MATCH(request.URL, @"extractPdfTextMapping")) 
+        {
+            response.data = [pdfManager extractPdfTextMappingForFile:fileId page:[page intValue]];
+        }
+        else if (URL_MATCH(request.URL, @"extractPdfText"))  
+        {
+            response.data = [pdfManager extractPdfTextForFile:fileId page:[page intValue]];
+        }
+        else if (URL_MATCH(request.URL, @"getRenderOptimumSizeFactor"))  
+        {
+            response.data = [pdfManager getRenderOptimumSizeFactor:fileId page:[page intValue]];
+        }
+    }
+    else if (URL_MATCH(request.URL, @"provisioningfiledownload.jsp"))
+    {
+        response = [[OfflineResponse alloc] init];
+        
+        NSString *fileId = [RequestUtil getParameter:request parameterName:@"fileId"];
+        NSData * data = [FileDownloadManager getFile:fileId];
+        if(data!=nil)
+        {
+            response.statusCode = 200;
+            response.data = data;
+        }
+        else 
+        {
+            response.statusCode = 404;
+        }
+    }
+    else if (URL_MATCH(request.URL, @"getDeviceId"))
+    {
+        response = [[OfflineResponse alloc] init];
+        
+        response.statusCode = 200;  //TODO: Need implement error handler
+        NSString *deviceId = [[UIDevice currentDevice] uniqueDeviceIdentifier];
+        
+        response.data = [deviceId dataUsingEncoding:NSUTF8StringEncoding];
+    }
+    else if (URL_MATCH(request.URL, @"isOnline"))
+    {
+        response = [[OfflineResponse alloc] init];
+        response.statusCode = 200;
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        if ([appDelegate networkStatus] != NotReachable)
+        {
+            response.data = [@"true" dataUsingEncoding:NSUTF8StringEncoding];
+        }
+        else
+        {
+            response.data = [@"false" dataUsingEncoding:NSUTF8StringEncoding];
+        }
+    }
+    else if (URL_MATCH(request.URL, @"setCurrentUser"))
+    {
+        
+        NSString *userId = [RequestUtil getParameter:request parameterName:@"userId"];
+        NSString *login = [RequestUtil getParameter:request parameterName:@"login"];
+        
+        [[UserManager sharedUserManager] setUserId:userId];
+        [[UserManager sharedUserManager] setLogin:login];
+        
+    }
+    else if (URL_MATCH(request.URL, @"getCurrentUser"))
+    {
+
+        response = [[OfflineResponse alloc] init];
+        
+        response.statusCode = 200;  
+        NSString *userId = [[UserManager sharedUserManager] userId];
+        NSString *login = [[UserManager sharedUserManager] login];
+        
+        NSDictionary *json = [NSDictionary dictionaryWithObjectsAndKeys:userId, @"userId", login, @"login", nil];
+        
+        response.data = [json JSONData];
+
+    }
+    else if (URL_MATCH(request.URL, @"getStreamPort"))
+    {
+        response = [[OfflineResponse alloc] init];
+        
+        response.statusCode = 200; 
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *streamPort = [NSString stringWithFormat:@"%i",[appDelegate localStreamServer].listeningPort];
+        
+        response.data = [streamPort dataUsingEncoding:NSUTF8StringEncoding];
+    }
+    else if (URL_MATCH(request.URL, @"link"))
+    {
+        NSString *url = [RequestUtil getParameter:request parameterName:@"url"];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+    }
+    else if (URL_MATCH(request.URL, @"getLCAStatus"))
+    {
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        NSString *lcaServerUrl = [[appDelegate lca] getLCAServerUrl];
+        NSNumber *isAlive = [[appDelegate lca] isAlive:lcaServerUrl]? [NSNumber numberWithBool:YES] : [NSNumber numberWithBool:NO];
+        NSNumber *isManual = [NSNumber numberWithBool:NO];
+        
+        NSMutableDictionary *json = [[NSMutableDictionary alloc] init];
+        if(lcaServerUrl!=nil)
+        {
+            [json setObject:lcaServerUrl forKey:@"url"];
+            [json setObject:isAlive forKey:@"isAlive"];
+            if([lcaServerUrl isEqualToString:[[appDelegate lca] getLCAServerPreferenceUrl]])
+                isManual = [NSNumber numberWithBool:YES];
+        }
+        else
+        {
+            [json setObject:isAlive forKey:@"isAlive"];
+        }
+        [json setObject:isManual forKey:@"isManual"];
+        
+        response = [[OfflineResponse alloc] init];
+        response.statusCode = 200;
+        response.data = [json JSONData];
+
+    }
+    else if (URL_MATCH(request.URL, @"setLCAServerUrl"))
+    {
+        response = [[OfflineResponse alloc] init];
+        response.statusCode = 200;
+
+        NSString *lcaServerUrl = [RequestUtil getParameter:request parameterName:@"lcaServerUrl"];
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [[appDelegate lca] setLCAServerUrl:lcaServerUrl];
+    }
+    else if (URL_MATCH(request.URL, @"getLCAServerUrl"))
+    {
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+        NSString *lcaServerUrl = [[appDelegate lca] getLCAServerUrl];
+        if(lcaServerUrl != nil)
+        {
+            response = [[OfflineResponse alloc] init];
+            response.statusCode = 200;
+            response.data = [lcaServerUrl dataUsingEncoding:NSUTF8StringEncoding];
+        }
+    }
+
+    return response;
+}
+
+@end

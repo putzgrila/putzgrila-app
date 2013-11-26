@@ -1,0 +1,27 @@
+//
+//  CustomResourceUtil.m
+//  Textbook
+//
+//  Created by Marcelo Moreira Tavares on 7/10/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import "CustomResourceUtil.h"
+
+@implementation CustomResourceUtil
+
++ (NSString *) getResourceValue:(NSString *)customResource
+{
+    NSString *path=[[NSBundle mainBundle] pathForResource:@"CustomResources" ofType:@"plist"];
+    NSDictionary *dict= [NSDictionary dictionaryWithContentsOfFile:path];
+
+    return [dict objectForKey:customResource];
+}
+
++ (NSString *) hostname
+{
+    NSString *hostname = [[CustomResourceUtil getResourceValue:kCONNECTION_URL] substringFromIndex:7];
+    return [[hostname componentsSeparatedByString:@":"] objectAtIndex:0];
+}
+
+@end

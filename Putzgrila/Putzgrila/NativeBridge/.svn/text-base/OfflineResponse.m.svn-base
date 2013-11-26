@@ -1,0 +1,17 @@
+//
+//  OfflineResponse.m
+//  Textbook
+//
+//  Created by Marcelo Moreira Tavares on 5/3/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import "OfflineResponse.h"
+
+@implementation OfflineResponse
+
+@synthesize data;
+@synthesize headers;
+@synthesize statusCode;
+
+@end

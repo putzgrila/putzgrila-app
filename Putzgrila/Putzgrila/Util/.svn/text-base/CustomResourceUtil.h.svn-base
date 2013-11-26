@@ -1,0 +1,20 @@
+//
+//  CustomResourceUtil.h
+//  Textbook
+//
+//  Created by Marcelo Moreira Tavares on 7/10/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+#define kCONNECTION_URL @"Connection Url"
+#define KAPPLICATION_ID @"Application Id"
+#define KVERSION @"appVersion"
+#define kDEVICE_ENCRYPTION_SUPPORT @"Device Encryption Support"
+
+@interface CustomResourceUtil : NSObject
+
++ (NSString *) getResourceValue:(NSString *)customResource;
++ (NSString *) hostname;
+@end

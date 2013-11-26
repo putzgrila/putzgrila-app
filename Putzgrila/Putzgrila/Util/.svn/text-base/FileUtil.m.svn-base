@@ -1,0 +1,87 @@
+//
+//  FileUtil.m
+//  Textbook
+//
+//  Created by Marcelo Moreira Tavares on 22/05/13.
+//
+//
+
+#import "FileUtil.h"
+
+#define VIDEO_MP4 @"video/mp4"
+#define AUDIO_MP3 @"audio/mp3"
+#define IMAGE_PNG @"image/png"
+#define APPLICATION_PDF @"application/pdf"
+#define APPLICATION_ZIP @"application/zip"
+
+@implementation FileUtil
+
++ (NSString *) detectMimeType:(NSString *) filePath
+{
+    
+    FileCryptHandler *file = [[FileCryptHandler alloc] initWithFilePath:filePath];  // Transparent read crypt files, if not crypt just pass by...
+    return [FileUtil detectMimeTypeWithFileCryptHandler:file];
+}
+
++ (NSString *) detectMimeTypeWithFileCryptHandler:(FileCryptHandler *) file
+{
+    NSString *mimeType = nil;
+    
+    if(file != nil)
+    {
+        int block_length = 16;
+        unsigned char b[block_length];
+        
+        if([file readNBytes:block_length toBuffer:b fromOffset:0])
+        {
+            // Now ready to go... Magic Numbers matches
+            if(b[0]==0x00 && b[1]==0x00 && b[2]==0x00 &&
+               b[4]==0x66 && b[5]==0x74 && b[6]==0x79 &&
+               b[7]==0x70 )
+            {
+                mimeType = VIDEO_MP4;
+            }
+            
+            else if(b[0]==0xFF && b[1]==0xFB )
+            {
+                mimeType = AUDIO_MP3;
+            }
+            
+            else if(b[0]==0x49 && b[1]==0x44 && b[2]==0x33)
+            {
+                mimeType = AUDIO_MP3;
+            }
+            
+            else if(b[0]==0x89 && b[1]==0x50 && b[2]==0x4E &&
+                    b[3]==0x47 && b[4]==0x0D && b[5]==0x0A &&
+                    b[6]==0x1A && b[7]==0x0A)
+            {
+                mimeType = IMAGE_PNG;
+            }
+            
+            else if(b[0]==0x25 && b[1]==0x50 && b[2]==0x44 &&
+                    b[3]==0x46)
+            {
+                mimeType = APPLICATION_PDF;
+            }
+            
+            else if(b[0]==0x50 && b[1]==0x4B && b[2]==0x03 &&
+                    b[3]==0x04 && b[4]==0x50 && b[5]==0x4B &&
+                    b[6]==0x05 && b[7]==0x06)
+            {
+                mimeType = APPLICATION_ZIP;
+            }
+            
+            else if(b[0]==0x50 && b[1]==0x4B && b[2]==0x07 &&
+                    b[3]==0x08)
+            {
+                mimeType = APPLICATION_ZIP;
+            }
+        }
+        
+    }
+    
+    return mimeType;
+}
+
+@end

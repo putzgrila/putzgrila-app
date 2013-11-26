@@ -1,0 +1,17 @@
+//
+//  FileUtil.h
+//  Textbook
+//
+//  Created by Marcelo Moreira Tavares on 22/05/13.
+//
+//
+
+#import <Foundation/Foundation.h>
+#import "FileCryptHandler.h"
+
+@interface FileUtil : NSObject
+
++ (NSString *) detectMimeType:(NSString *) file;
++ (NSString *) detectMimeTypeWithFileCryptHandler:(FileCryptHandler *) file;
+
+@end

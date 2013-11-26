@@ -1,0 +1,203 @@
+//
+//  FileCryptHandler.m
+//  Textbook
+//
+//  Created by Rodrigo Miranda Terra on 24/05/13.
+//
+//
+
+#import "FileCryptHandler.h"
+#import "cryptoapi.h"
+
+@interface FileCryptHandler()
+
+@property (nonatomic,assign) FILE *fp;
+@property (nonatomic,assign) bool mIsEncrypted;
+
+@end
+
+@implementation FileCryptHandler
+@synthesize fp,mIsEncrypted;
+
+// Life Cycle
+
+#pragma mark Life Cycle
+
+-(id)init
+{
+    [NSException raise:NSInternalInconsistencyException
+                format:@"You must use -initWithFileDescriptor: or -initWithFilePath:"];
+    return nil;
+}
+
+-(id) initWithFileDescriptor:(FILE *) pFile
+{
+    if (self = [super init])
+    {
+        fp = pFile;
+        mIsEncrypted = IsFileEncrypted(fp);
+    }
+    return self;
+}
+
+-(id) initWithFilePath:(NSString *) filePath
+{
+    FILE *pFile = fopen([filePath cStringUsingEncoding:NSUTF8StringEncoding], "rb");
+
+    id ret;
+    
+    if(pFile != NULL)
+    {
+        ret = [self initWithFileDescriptor:pFile];
+    }
+
+    return ret;
+}
+
+- (void)dealloc
+{
+    if(fp != NULL)
+    {
+        fclose(fp);
+    }
+}
+
+//
+
+-(long long) getPlainFileSize
+{  // TODO: Fix to not crypt case
+    long long size = 0;
+    
+    if(mIsEncrypted)
+    {
+        size = getLoadDataSize(fp);
+    }
+    else
+    {
+        fseek(fp, 0, SEEK_END);
+        size = ftell(fp);
+    }
+    
+    return size;
+}
+
+-(bool)readNBytes:(long)size toBuffer:(void *)buffer fromOffset:(long long)offset
+{
+    bool ret = false;
+    
+    if(mIsEncrypted)
+    {
+        ret = readLoadData(fp,buffer,offset,size);
+    }
+    else
+    {
+        fseek(fp,offset,SEEK_SET);
+        ret = (fread(buffer,sizeof(char),size,fp)==size);
+    }
+    
+    return ret;
+}
+
+-(bool)isEncrypted
+{
+    return mIsEncrypted;
+}
+
+#pragma mark core functions
+
+#define CRYPTO_BLOCK_SIZE 8
+long long getLoadDataSize(FILE* pFile)
+{
+    uint64_t size = 0UL;
+    long ret=0;
+    
+    if(pFile != NULL)
+    {
+        fseek(pFile, 12, SEEK_SET); // Goto header that store real size, 12=8 (magic sig) + 4 (from version)
+        
+        if(fread(&size, sizeof(uint64_t), 1, pFile)==1) {
+            ret = (long long) size;
+        }
+    }
+    
+    return ret;
+}
+
+#define FILE_HEADER_SIZE 20
+bool subblock_decipher(FILE * fp, void* buffer, long long offset, long size) {
+    uint64_t block; // Using a 64 bits var as fast memory alloc in stack to avoid fragment heap
+    bool ret=true;
+    int prebytes = (offset % CRYPTO_BLOCK_SIZE); // Byte in before begin to start a block
+    
+    fseek(fp, FILE_HEADER_SIZE + offset - prebytes, SEEK_SET);
+    if(fread(&block, sizeof(uint64_t), 1, fp)<1) {
+        ret = false;
+    } else {
+        block_decipher((void *)&block, sizeof(uint64_t));
+        memcpy(buffer, ((void *)((char *)&block + prebytes)), size);
+    }
+    return ret;
+}
+
+bool readLoadData(FILE* pFile, void* buffer, long long offset, long size)
+{
+    bool ret = true;
+    
+    if(pFile != NULL)
+    {
+        long bytesProcessed = 0;
+        // Process first byte until the begin of first block or until finished
+        int bytesToAlignedBlock = CRYPTO_BLOCK_SIZE - (offset % CRYPTO_BLOCK_SIZE);
+        if ( (size<CRYPTO_BLOCK_SIZE) && bytesToAlignedBlock>=size) {
+            ret = subblock_decipher(pFile, buffer, offset, size);
+            bytesProcessed += size;
+        } else {
+            ret = subblock_decipher(pFile, buffer, offset, bytesToAlignedBlock);
+            bytesProcessed += bytesToAlignedBlock;
+        }
+        
+        long bytesOfCompletedBlocksAfterAlignment = (size-bytesProcessed) - ((size-bytesProcessed)%CRYPTO_BLOCK_SIZE);
+        if ( bytesOfCompletedBlocksAfterAlignment && ret==true) {  // Are there a completed block still left?
+            // Process complete block bytes
+            fseek(pFile, FILE_HEADER_SIZE + offset + bytesProcessed, SEEK_SET);
+            if(fread((void *)((char*)buffer+bytesProcessed), sizeof(char), bytesOfCompletedBlocksAfterAlignment, pFile)<bytesOfCompletedBlocksAfterAlignment) {
+                ret = false;
+            }
+            
+            block_decipher((unsigned char *)buffer + bytesProcessed, bytesOfCompletedBlocksAfterAlignment );
+            bytesProcessed += bytesOfCompletedBlocksAfterAlignment;
+        }
+        
+        // Are there some leftover bytes?
+        long leftoverBytes = (size - bytesProcessed);
+        if (leftoverBytes && ret==true) {
+            ret = subblock_decipher(pFile, (void *)((char*)buffer+bytesProcessed), offset+bytesProcessed, leftoverBytes);
+        }
+    } else {
+        ret = false;
+    }
+    
+    return ret;
+}
+
+//End implemention of struct FS_FileRead.
+bool IsFileEncrypted(FILE * pFile) {
+    bool ret = FALSE;
+    
+    if(pFile != NULL)
+    {
+        ret = fseek(pFile, 0, SEEK_SET);
+    	int sig_magic_block_length = 8;
+        char lumCrypt_magic[sig_magic_block_length];
+        
+        if(fread(lumCrypt_magic, sizeof(char), sig_magic_block_length, pFile)==sig_magic_block_length) {
+            if (!strncmp(lumCrypt_magic,"LumCrypt",sig_magic_block_length)) {
+                ret = TRUE;
+            }
+        }
+    }
+    
+    return ret;
+}
+
+@end
