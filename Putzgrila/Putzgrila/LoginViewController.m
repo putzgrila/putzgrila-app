@@ -28,9 +28,9 @@
 {
     [super viewDidLoad];
     
-    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded)
-    {
-        
+//    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded)
+//    {
+    
         NSString *html = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"html"];
         
         NSURL *url = [NSURL fileURLWithPath:html];
@@ -38,10 +38,10 @@
         [[self.loginWebview scrollView] setBounces:NO];
         // Yes, so just open the session (this won't display any UX).
         //[LoginViewController openSession];
-    }
-    else
-    {
-        [Facebook openSession];
+//    }
+//    else
+//    {
+//        [Facebook openSession];
         
 //        NSString *html = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"html"];
 //        
@@ -52,7 +52,7 @@
 //        [LoginViewController openSession];
         // No, display the login page.
         // [self showLoginView];
-    }
+//    }
     
     
     

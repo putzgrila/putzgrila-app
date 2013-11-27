@@ -9,10 +9,8 @@
 /* Begin PBXBuildFile section */
 		3E02AC00181D781F00925D3B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ED72B41181C141200D33C81 /* CoreGraphics.framework */; };
 		3E2F96F41821DC7600AF653B /* Facebook.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E2F96F31821DC7600AF653B /* Facebook.m */; };
-		3E2F97401821E5E800AF653B /* html in Resources */ = {isa = PBXBuildFile; fileRef = 3E2F973F1821E5E800AF653B /* html */; };
-		3E5E1665181DBB460095FCB0 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E5E1664181DBB460095FCB0 /* FacebookSDK.framework */; };
-		3EA558B7181C882B0003473D /* ComplaingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA558B6181C882B0003473D /* ComplaingViewController.m */; };
-		3EA558BD181C8A800003473D /* RecentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA558BC181C8A800003473D /* RecentViewController.m */; };
+		3E64CA181846BA6600E0467E /* html in Resources */ = {isa = PBXBuildFile; fileRef = 3E64CA171846BA6600E0467E /* html */; };
+		3E64CA1A1846BAE000E0467E /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E64CA191846BAE000E0467E /* FacebookSDK.framework */; };
 		3EB6B0BF181D74C800302835 /* NativeBridgeInterceptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EB6B0BA181D74C800302835 /* NativeBridgeInterceptor.m */; };
 		3EB6B0C0181D74C800302835 /* NativeBridgeUrlProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EB6B0BC181D74C800302835 /* NativeBridgeUrlProtocol.m */; };
 		3EB6B0C1181D74C800302835 /* OfflineResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EB6B0BE181D74C800302835 /* OfflineResponse.m */; };
@@ -46,12 +44,8 @@
 /* Begin PBXFileReference section */
 		3E2F96F21821DC7600AF653B /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Facebook.h; sourceTree = "<group>"; };
 		3E2F96F31821DC7600AF653B /* Facebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Facebook.m; sourceTree = "<group>"; };
-		3E2F973F1821E5E800AF653B /* html */ = {isa = PBXFileReference; lastKnownFileType = folder; name = html; path = "../../html/putzgrila-app/html"; sourceTree = "<group>"; };
-		3E5E1664181DBB460095FCB0 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
-		3EA558B5181C882B0003473D /* ComplaingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComplaingViewController.h; sourceTree = "<group>"; };
-		3EA558B6181C882B0003473D /* ComplaingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComplaingViewController.m; sourceTree = "<group>"; };
-		3EA558BB181C8A800003473D /* RecentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecentViewController.h; sourceTree = "<group>"; };
-		3EA558BC181C8A800003473D /* RecentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecentViewController.m; sourceTree = "<group>"; };
+		3E64CA171846BA6600E0467E /* html */ = {isa = PBXFileReference; lastKnownFileType = folder; name = html; path = ../../html; sourceTree = "<group>"; };
+		3E64CA191846BAE000E0467E /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		3EA558C6181D49730003473D /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		3EA558C7181D49730003473D /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		3EA558C8181D49730003473D /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -99,7 +93,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E02AC00181D781F00925D3B /* CoreGraphics.framework in Frameworks */,
-				3E5E1665181DBB460095FCB0 /* FacebookSDK.framework in Frameworks */,
+				3E64CA1A1846BAE000E0467E /* FacebookSDK.framework in Frameworks */,
 				3ED72B44181C141200D33C81 /* UIKit.framework in Frameworks */,
 				3ED72B40181C141200D33C81 /* Foundation.framework in Frameworks */,
 			);
@@ -127,7 +121,7 @@
 			name = Facebook;
 			sourceTree = "<group>";
 		};
-		3EB6B0AA181D6FE000302835 /* Login */ = {
+		3EB6B0AA181D6FE000302835 /* Core */ = {
 			isa = PBXGroup;
 			children = (
 				3ED72B70181C148100D33C81 /* LoginViewController.m */,
@@ -135,25 +129,7 @@
 				3ED72B72181C148100D33C81 /* LoginViewController.h */,
 				3ED72B73181C148100D33C81 /* LoginWebView.h */,
 			);
-			name = Login;
-			sourceTree = "<group>";
-		};
-		3EB6B0AB181D6FEC00302835 /* Complaining */ = {
-			isa = PBXGroup;
-			children = (
-				3EA558B5181C882B0003473D /* ComplaingViewController.h */,
-				3EA558B6181C882B0003473D /* ComplaingViewController.m */,
-			);
-			name = Complaining;
-			sourceTree = "<group>";
-		};
-		3EB6B0AC181D700200302835 /* RecentComplainings */ = {
-			isa = PBXGroup;
-			children = (
-				3EA558BB181C8A800003473D /* RecentViewController.h */,
-				3EA558BC181C8A800003473D /* RecentViewController.m */,
-			);
-			name = RecentComplainings;
+			name = Core;
 			sourceTree = "<group>";
 		};
 		3EB6B0B8181D74C800302835 /* NativeBridge */ = {
@@ -200,7 +176,7 @@
 		3ED72B3E181C141200D33C81 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3E5E1664181DBB460095FCB0 /* FacebookSDK.framework */,
+				3E64CA191846BAE000E0467E /* FacebookSDK.framework */,
 				3EA558C6181D49730003473D /* AddressBook.framework */,
 				3EA558C7181D49730003473D /* AddressBookUI.framework */,
 				3EA558C8181D49730003473D /* AudioToolbox.framework */,
@@ -222,18 +198,16 @@
 		3ED72B45181C141200D33C81 /* Putzgrila */ = {
 			isa = PBXGroup;
 			children = (
-				3E2F973F1821E5E800AF653B /* html */,
+				3E64CA171846BA6600E0467E /* html */,
 				3E2F96F11821DC2E00AF653B /* Facebook */,
 				3EB6B0C2181D753C00302835 /* Util */,
 				3EB6B0B8181D74C800302835 /* NativeBridge */,
-				3EB6B0AA181D6FE000302835 /* Login */,
+				3EB6B0AA181D6FE000302835 /* Core */,
 				3ED72B4E181C141200D33C81 /* PutzgrilaAppDelegate.h */,
 				3ED72B4F181C141200D33C81 /* PutzgrilaAppDelegate.m */,
 				3ED72B51181C141200D33C81 /* Images.xcassets */,
 				3ED72B46181C141200D33C81 /* Supporting Files */,
 				3ED72B76181C14A300D33C81 /* PutzgrilaStoryboard.storyboard */,
-				3EB6B0AB181D6FEC00302835 /* Complaining */,
-				3EB6B0AC181D700200302835 /* RecentComplainings */,
 			);
 			path = Putzgrila;
 			sourceTree = "<group>";
@@ -346,7 +320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3ED72B77181C14A300D33C81 /* PutzgrilaStoryboard.storyboard in Resources */,
-				3E2F97401821E5E800AF653B /* html in Resources */,
+				3E64CA181846BA6600E0467E /* html in Resources */,
 				3ED72B4A181C141200D33C81 /* InfoPlist.strings in Resources */,
 				3ED72B52181C141200D33C81 /* Images.xcassets in Resources */,
 			);
@@ -371,12 +345,10 @@
 				3ED72B4C181C141200D33C81 /* main.m in Sources */,
 				3EB6B0D1181D753C00302835 /* RequestUtil.m in Sources */,
 				3ED72B50181C141200D33C81 /* PutzgrilaAppDelegate.m in Sources */,
-				3EA558B7181C882B0003473D /* ComplaingViewController.m in Sources */,
 				3EB6B0C1181D74C800302835 /* OfflineResponse.m in Sources */,
 				3ED72B74181C148100D33C81 /* LoginViewController.m in Sources */,
 				3EB6B0C0181D74C800302835 /* NativeBridgeUrlProtocol.m in Sources */,
 				3ED72B75181C148100D33C81 /* LoginWebView.m in Sources */,
-				3EA558BD181C8A800003473D /* RecentViewController.m in Sources */,
 				3E2F96F41821DC7600AF653B /* Facebook.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -500,6 +472,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/gabrielmartins/Documents/Projetos\\ XCode/putzgrila/Putzgrila",
+					"/Users/gabrielmartins/Documents/Projetos\\ XCode/putzgrila/html/putzgrila-app/Putzgrila",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Putzgrila/Putzgrila-Prefix.pch";
@@ -520,6 +493,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/gabrielmartins/Documents/Projetos\\ XCode/putzgrila/Putzgrila",
+					"/Users/gabrielmartins/Documents/Projetos\\ XCode/putzgrila/html/putzgrila-app/Putzgrila",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Putzgrila/Putzgrila-Prefix.pch";
