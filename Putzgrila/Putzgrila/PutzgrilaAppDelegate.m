@@ -7,11 +7,14 @@
 //
 
 #import "PutzgrilaAppDelegate.h"
+#import "NativeBridgeInterceptor.h"
+#import "Facebook.h"
 
 @implementation PutzgrilaAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [NSURLProtocol registerClass:[NativeBridgeInterceptor class]];
     return YES;
 }
 
@@ -41,5 +44,11 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return [FBSession.activeSession handleOpenURL:url];
+}
+
 
 @end

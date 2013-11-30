@@ -8,12 +8,15 @@
 
 #import "LoginViewController.h"
 #import "Facebook.h"
+#import "ColorUtil.h"
 
 @interface LoginViewController ()
 
 @end
 
 @implementation LoginViewController
+
+@synthesize loginWebview = _loginWebview;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -27,36 +30,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSString *html = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"html"];
+    NSURL *url = [NSURL fileURLWithPath:html];
     
-//    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded)
-//    {
+    self.view.backgroundColor = [ColorUtil colorWithHexString:@"ffb600"];
+    self.loginWebview.backgroundColor = [ColorUtil colorWithHexString:@"ffb600"];
     
-        NSString *html = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"html"];
-        
-        NSURL *url = [NSURL fileURLWithPath:html];
-        [self.loginWebview loadRequest:[NSURLRequest requestWithURL:url]];
-        [[self.loginWebview scrollView] setBounces:NO];
-        // Yes, so just open the session (this won't display any UX).
-        //[LoginViewController openSession];
-//    }
-//    else
-//    {
-//        [Facebook openSession];
-        
-//        NSString *html = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"html"];
-//        
-//        NSURL *url = [NSURL fileURLWithPath:html];
-//        [self.loginWebview loadRequest:[NSURLRequest requestWithURL:url]];
-//        [[self.loginWebview scrollView] setBounces:NO];
-        
-//        [LoginViewController openSession];
-        // No, display the login page.
-        // [self showLoginView];
-//    }
-    
-    
-    
-    
+    [self.loginWebview loadRequest:[NSURLRequest requestWithURL:url]];
+    [[self.loginWebview scrollView] setBounces:NO];
+}
+
+-(void)runJScript:(NSString *)js
+{
+    [[self loginWebview] stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (void)didReceiveMemoryWarning
@@ -64,5 +50,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 @end

@@ -7,6 +7,8 @@
 //
 
 #import "Facebook.h"
+#import "LoginViewController.h"
+#import "LoginWebView.h"
 
 @implementation Facebook
 
@@ -33,28 +35,25 @@
                       state:(FBSessionState) state
                       error:(NSError *)error
 {
-    switch (state) {
+    switch (state)
+    {
         case FBSessionStateOpen:
         {
-            //            UIViewController *topViewController =
-            //            [self.navController topViewController];
-            //            if ([[topViewController modalViewController]
-            //                 isKindOfClass:[SCLoginViewController class]]) {
-            //                [topViewController dismissModalViewControllerAnimated:YES];
-            //            }
+            //User is now logged with facebook...
+            
+            UIWindow *window = [UIApplication sharedApplication].keyWindow;
+            [(LoginViewController *)window.rootViewController runJScript:@"HTMLView.openActivity()"];
             break;
         }
             
         case FBSessionStateClosed:
+        {
+            NSLog(@"");
+            break;
+        }
         case FBSessionStateClosedLoginFailed:
         {
-            // Once the user has logged in, we want them to
-            // be looking at the root view.
-            //            [self.navController popToRootViewControllerAnimated:NO];
-            //
-            //            [FBSession.activeSession closeAndClearTokenInformation];
-            //
-            //            [self showLoginView];
+            NSLog(@"");
             break;
         }
             

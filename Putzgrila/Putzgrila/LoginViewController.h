@@ -13,7 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIWebView *loginWebview;
 
 
-
+-(void)runJScript: (NSString*)js;
 
 
 @end

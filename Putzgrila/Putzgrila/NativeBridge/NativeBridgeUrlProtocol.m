@@ -1,37 +1,31 @@
 //
-//  NativeBridgeUrlProtocol.m
-//  Putzgrila
+//  NativeBridgeInterceptor.m
+//  Poligno
 //
-//  Created by Gabriel Martins on 26/10/13.
-//
+//  Created by Marcelo Moreira Tavares on 09/11/13.
+//  Copyright (c) 2013 Lumis. All rights reserved.
 //
 
-#import "NativeBridgeUrlProtocol.h"
+#import <Foundation/Foundation.h>
 #import "NativeBridgeInterceptor.h"
+#import "RequestUtil.h"
+#import "PutzgrilaAppDelegate.h"
 
-#define URL_MATCH(ORIGINAL_URL, URL) [ORIGINAL_URL.absoluteString rangeOfString:URL].location != NSNotFound
 
-@implementation NativeBridgeUrlProtocol
+#define URL_MATCH(ORIGINAL_URL, URL) ([ORIGINAL_URL.absoluteString rangeOfString:URL].location != NSNotFound)
+
+
+@implementation NativeBridgeInterceptor
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request
 {
-    if([NativeBridgeInterceptor shouldInterceptRequest:[request URL]])
+    if([[[request URL] scheme] isEqualToString:@"log"] )
     {
         return true;
     }
-    else if([[[request URL] scheme] isEqualToString:@"log"] )
+    else if([[[request URL] scheme] isEqualToString:@"tbk"] )
     {
         return true;
-    }
-    else if([[[request URL] scheme] isEqualToString:@"statusbar"] )
-    {
-        if([[[request URL] absoluteString] isEqualToString:@"statusbar:true"])
-            [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-
-        else
-            [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-
-        return false;
     }
     
     return false;
@@ -42,37 +36,40 @@
     return request;
 }
 
+-(void) openBookshelf
+{
+}
+
 - (void)startLoading
 {
     id<NSURLProtocolClient> client = [self client];
     
     NSURLRequest* request = [self request];
-
-    OfflineResponse* offlineResponse;
+  //  PutzgrilaAppDelegate *appDelegate = (PutzgrilaAppDelegate*)[[UIApplication sharedApplication] delegate];
     
-    if([NativeBridgeInterceptor shouldInterceptRequest:[request URL]])
+    NSData *data = nil;
+    
+    if (URL_MATCH(request.URL, @"openBookshelf"))
     {
-        offlineResponse = [NativeBridgeInterceptor processRequest:request];
-        if(offlineResponse==nil)
-        {
-            offlineResponse = [[OfflineResponse alloc] init];
-            [offlineResponse setStatusCode:200];
-        }
+        //[appDelegate performSelectorOnMainThread:@selector(performSegue:) withObject:@"openBookshelf" waitUntilDone:NO];
     }
-    else if([[[request URL] scheme] isEqualToString:@"log"] ) {
-        NSLog(@"%@", [[request URL] absoluteString]);
-        offlineResponse = [[OfflineResponse alloc] init];
-        [offlineResponse setStatusCode:200];
+       
+    NSDictionary *headerFields = @{ @"ETag" : @"12345678" };
+    NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:request.URL
+                                                              statusCode:200
+                                                             HTTPVersion:@"HTTP/1.1"
+                                   
+                                                            headerFields:headerFields];
+    
+    if(data==nil)
+    {
+        NSString *value = @"";
+        data = [value dataUsingEncoding:NSUTF8StringEncoding];
     }
-
-    NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:request.URL 
-                                                             statusCode:offlineResponse.statusCode 
-                                                             HTTPVersion:@"HTTP/1.1" 
-                                                             headerFields:offlineResponse.headers];
-
+    
     [client URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
-    [client URLProtocol:self didLoadData:offlineResponse.data];
-    [client URLProtocolDidFinishLoading:self];    
+    [client URLProtocol:self didLoadData:data];
+    [client URLProtocolDidFinishLoading:self];
 }
 
 - (void)stopLoading
@@ -80,4 +77,3 @@
 }
 
 @end
-

@@ -10,4 +10,6 @@
 
 @interface LoginWebView : UIWebView
 
++(void)runScrip: (NSString *)script;
+
 @end

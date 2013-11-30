@@ -1,17 +1,13 @@
 //
 //  NativeBridgeInterceptor.h
-//  Putzgrila
+//  Poligno
 //
-//  Created by Gabriel Martins on 26/10/13.
-//
+//  Created by Marcelo Moreira Tavares on 09/11/13.
+//  Copyright (c) 2013 Lumis. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "OfflineResponse.h"
+#import <UIKit/UIKit.h>
 
-@interface NativeBridgeInterceptor : NSObject
-
-+ (BOOL) shouldInterceptRequest: (NSURL *) URL;
-+ (OfflineResponse *) processRequest: (NSURLRequest*)request;
+@interface NativeBridgeInterceptor : NSURLProtocol
 
 @end
